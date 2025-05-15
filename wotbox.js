@@ -78,6 +78,8 @@ function initialize()
     document.getElementById("opent3").addEventListener("click", opent3box);
     document.getElementById("automate").addEventListener("click", automateOpenBoxes);
     document.getElementById("run-simulation").addEventListener("click", runSimulation);
+
+    setGuarTank();
 }
 
 function buyBox()
@@ -161,6 +163,8 @@ function openBox(bnum, prob, boxCDF, tankCDF, tankList, tier)
                 t3boxtemp += getTank(tier, tankCDF, tankList);
             }
         }
+
+        setGuarTank();
     }
 
     console.log("gaTankLeft:",gaTankLeft);
@@ -174,9 +178,9 @@ function openBox(bnum, prob, boxCDF, tankCDF, tankList, tier)
     document.getElementById("t2box").innerText = t2box.toString();
     document.getElementById("t3box").innerText = t3box.toString();
     
-    document.getElementById("box_t1_new").innerText = t1boxtemp.toString();
-    document.getElementById("box_t2_new").innerText = t2boxtemp.toString();
-    document.getElementById("box_t3_new").innerText = t3boxtemp.toString();
+    // document.getElementById("box_t1_new").innerText = t1boxtemp.toString();
+    // document.getElementById("box_t2_new").innerText = t2boxtemp.toString();
+    // document.getElementById("box_t3_new").innerText = t3boxtemp.toString();
 
     t1cum += t1boxtemp;
     t2cum += t2boxtemp;
@@ -195,6 +199,13 @@ function getLucky(CDF)
         if(r<CDF[i])
             return i
     }
+}
+
+function setGuarTank()
+{
+    document.getElementById("t1g").innerText = gaTankLeft[0].toString();
+    document.getElementById("t2g").innerText = gaTankLeft[1].toString();
+    document.getElementById("t3g").innerText = gaTankLeft[2].toString();
 }
 
 function getTank(tier, tankCDF, tankList)
