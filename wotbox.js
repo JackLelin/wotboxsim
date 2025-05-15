@@ -2,8 +2,8 @@ let selectedtanks = [];
 let gaTankLeft;
 const gaTankList = [50, 40, 20];
 
-const alltanks = ["Ch54", "A155", "A150", "A132", "G44", "Pl27", "G174", "Cz32", "Pl26", "S25", "F122", "GB84", "R122", "S30", "F132", "G165", "G171", "A149"];
-const tanknames = ["BZ-72-1", "AAT60", "MBTB", "T77", "Jagdtiger P", "Grom", "Turm", "Medved", "Pancernik", "Emil 1951", "VCS 6xt", "Chieftain", "T-44-100", "UDES 033", "Vercingetorix", "Kpz EK", "E77", "AMBT"];
+const alltanks = ["Ch54", "A155", "A150", "A132", "G44", "Pl27", "S25", "GB84", "R122", "S30", "F132", "G165", "G171", "A149", "G174", "Cz32", "Pl26", "F122"];
+const tanknames = ["BZ-72-1", "AAT60", "MBTB", "T77", "Jagdtiger P", "Grom", "Emil 1951", "Chieftain", "T-44-100", "UDES 033", "Vercingetorix", "Kpz EK", "E77", "AMBT", "Turm", "Medved", "Pancernik", "VCS 6x6"];
 
 const t1list = ["A132", "A149", "A155", "G44", "Pl26", "R122", "S25", "Pl27", "G174", "F122"]
 const t2list = ["Cz32", "S30", "G171", "Ch54", "G165"]
