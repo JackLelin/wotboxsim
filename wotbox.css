@@ -19,3 +19,315 @@ body {
     height: 50px;
     font-size: 20px;
 }
+
+.simulation-controls {
+    margin: 20px 0;
+    text-align: left;
+    padding: 0 20px;
+}
+
+.simulation-controls label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.simulation-controls input {
+    margin-right: 20px;
+    width: 80px;
+    height: 30px;
+    font-size: 16px;
+}
+
+.simulation-results {
+    margin: 20px;
+    text-align: left;
+    padding: 0 20px;
+}
+
+.histogram {
+    margin: 30px auto;
+    padding: 10px;
+    width: 95%;
+    max-width: 950px;
+}
+
+.chart-container {
+    position: relative;
+    margin: 70px 0 70px 60px;
+    height: 400px;
+}
+
+.axis-label {
+    font-weight: bold;
+    position: absolute;
+}
+
+.x-axis-label {
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.y-axis-label {
+    transform: rotate(-90deg);
+    left: -60px;
+    top: 50%;
+    transform-origin: top left;
+    white-space: nowrap;
+}
+
+.y-axis {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #333;
+}
+
+.y-tick {
+    position: absolute;
+    left: -40px;
+    transform: translateY(50%);
+    font-size: 12px;
+    text-align: right;
+    width: 35px;
+}
+
+.histogram-bars-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.histogram-bars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    border-bottom: 2px solid #333;
+}
+
+.histogram-bar-container {
+    position: absolute;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.histogram-bar {
+    position: absolute;
+    bottom: 0;
+    width: 80%;
+    left: 10%;
+    background-color: #4CAF50;
+    border-radius: 2px 2px 0 0;
+    z-index: 1;
+    transition: background-color 0.2s;
+}
+
+.histogram-bar:hover {
+    background-color: #3e8e41;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+.histogram-count {
+    font-size: 12px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    z-index: 2;
+    position: absolute;
+    top: -20px;
+}
+
+.histogram-label {
+    position: absolute;
+    bottom: -20px;
+    transform: rotate(-45deg);
+    font-size: 9px;
+    white-space: nowrap;
+    transform-origin: left top;
+    width: 60px;
+    text-align: left;
+    z-index: 10;
+    opacity: 0.7;
+}
+
+.stats-summary {
+    margin-bottom: 30px;
+}
+
+.stats-table {
+    border-collapse: collapse;
+    width: 80%;
+    max-width: 800px;
+    margin: 15px 0;
+    font-size: 14px;
+}
+
+.stats-table th, .stats-table td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.stats-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.stats-table td:nth-child(2) {
+    font-weight: bold;
+    text-align: center;
+}
+
+.stats-table td:nth-child(3) {
+    font-style: italic;
+    color: #555;
+}
+
+.stats-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.stats-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.histogram-bars::-webkit-scrollbar {
+    height: 8px;
+}
+
+.histogram-bars::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.histogram-bars::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.histogram-bars::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.y-grid-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 0;
+}
+
+.histogram-count-inside {
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    position: absolute;
+    top: 5px;
+    width: 100%;
+    text-align: center;
+}
+
+.tank-container {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 5px;
+    cursor: pointer;
+    position: relative;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    padding: 5px;
+    transition: all 0.2s ease;
+}
+
+.tank-container img {
+    height: 75px;
+    width: 120px;
+    margin-bottom: 5px;
+}
+
+.tank-name {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+}
+
+.tank-container.tanks_checked {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-color: #4CAF50;
+}
+
+.x-tick {
+    position: absolute;
+    bottom: -30px;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #333;
+}
+
+.x-tick-major {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.x-tick-minor {
+    font-size: 0;
+}
+
+.x-tick::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    height: 8px;
+    width: 1px;
+    background-color: #333;
+}
+
+.x-tick-major::before {
+    height: 8px;
+}
+
+.x-tick-minor::before {
+    height: 4px;
+}
+
+/* Vertical guide lines */
+.x-tick-major::after {
+    content: '';
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    height: 300px;
+    width: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 0;
+}
+.x-tick-minor::after {
+    content: '';
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    height: 300px;
+    width: 1px;
+    background-color: rgba(0, 0, 0, 0.03);
+    z-index: 0;
+}
+
+.histogram-note {
+    font-style: italic;
+    color: #666;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 10px;
+}
+
