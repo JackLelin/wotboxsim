@@ -215,6 +215,8 @@ function getTank(tier, tankCDF, tankList)
         let index = nohavelist.indexOf(tankList[ti]);
         if(index>-1)
         {
+            let idx = alltanks.indexOf(tankList[ti]);
+
             const tankId = tankList[ti];
             nohavelist.splice(index, 1);
             if(tier == 1)
@@ -246,7 +248,7 @@ function getTank(tier, tankCDF, tankList)
             // Create and add name
             const nameLabel = document.createElement("div");
             nameLabel.classList.add("tank-name");
-            nameLabel.textContent = tanknames[ti];
+            nameLabel.textContent = tanknames[idx];
             newContainer.appendChild(nameLabel);
             
             document.getElementById(id_new).append(newContainer);
@@ -265,7 +267,7 @@ function getTank(tier, tankCDF, tankList)
             // Create and add name
             const cumNameLabel = document.createElement("div");
             cumNameLabel.classList.add("tank-name");
-            cumNameLabel.textContent = tanknames[ti];
+            cumNameLabel.textContent = tanknames[idx];
             cumContainer.appendChild(cumNameLabel);
             
             document.getElementById(id_cum).append(cumContainer);
