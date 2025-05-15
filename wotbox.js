@@ -3,6 +3,7 @@ let gaTankLeft;
 const gaTankList = [50, 40, 20];
 
 const alltanks = ["Ch54", "A155", "A150", "A132", "G44", "Pl27", "G174", "Cz32", "Pl26", "S25", "F122", "GB84", "R122", "S30", "F132", "G165", "G171", "A149"];
+const tanknames = ["BZ-72-1", "AAT60", "MBTB", "T77", "Jagdtiger P", "Grom", "Turm", "Medved", "Pancernik", "Emil 1951", "VCS 6xt", "Chieftain", "T-44-100", "UDES 033", "Vercingetorix", "Kpz EK", "E77", "AMBT"];
 
 const t1list = ["A132", "A149", "A155", "G44", "Pl26", "R122", "S25", "Pl27", "G174", "F122"]
 const t2list = ["Cz32", "S30", "G171", "Ch54", "G165"]
@@ -53,7 +54,7 @@ function addTanks() {
         // Create and add the tank name label
         const nameLabel = document.createElement("div");
         nameLabel.classList.add("tank-name");
-        nameLabel.textContent = tankId;
+        nameLabel.textContent = tanknames[i];
         container.appendChild(nameLabel);
         
         // Add to appropriate tier section
