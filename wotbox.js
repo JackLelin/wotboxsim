@@ -246,7 +246,7 @@ function getTank(tier, tankCDF, tankList)
             // Create and add name
             const nameLabel = document.createElement("div");
             nameLabel.classList.add("tank-name");
-            nameLabel.textContent = tankId;
+            nameLabel.textContent = tanknames[ti];
             newContainer.appendChild(nameLabel);
             
             document.getElementById(id_new).append(newContainer);
@@ -265,7 +265,7 @@ function getTank(tier, tankCDF, tankList)
             // Create and add name
             const cumNameLabel = document.createElement("div");
             cumNameLabel.classList.add("tank-name");
-            cumNameLabel.textContent = tankId;
+            cumNameLabel.textContent = tanknames[ti];
             cumContainer.appendChild(cumNameLabel);
             
             document.getElementById(id_cum).append(cumContainer);
