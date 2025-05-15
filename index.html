@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Wot Box Sim</title>
+        <link rel="stylesheet" href="wotbox.css">
+        <script src="wotbox.js"></script>
+    </head>
+
+    <body>
+        <h1>WoT Raumfalte Cargo Sim</h1>
+        <h1 align="left">Step 1: Select tanks you own:</h1>
+        <h2 align="left">T1 tank: </h2>
+        <div align="left" id="tank_own_T1"> 
+        </div>
+        <h2 align="left">T2 tank: </h2>
+        <div align="left" id="tank_own_T2"> 
+        </div>
+        <h2 align="left">T3 tank: </h2>
+        <div align="left" id="tank_own_T3"> 
+        </div>
+        <h1 align="left">Step 2: Buy boxes</h1>
+        <div>
+        <button style="width: 100px; height: 50px;font-size: 20px;" id="buy-box">Buy</button>
+        <input style="width: 100px; height: 50px;font-size: 20px;" id="boxnum" value="">
+        <span style="width: 100px; height: 50px; font-size: 20px;">Boxes</span>
+        </div>
+        <h2 align="left">Box purchased: <span id="box_bought"></span></h2>
+        <h1 align="left">Step 3: Open boxes</h1>
+        <h2 align="left">
+            T1 box: <span id="t1box"></span> <button id="opent1" class="button">Open T1</button>
+            T2 box: <span id="t2box"></span> <button id="opent2" class="button">Open T2</button>
+            T3 box: <span id="t3box"></span> <button id="opent3" class="button">Open T3</button>
+        </h2>
+        <h1 align="left">Result:</h1>
+        <h2 align="left">T1 tank: </h2>
+        <div align="left" id="tank_T1_new"> 
+        </div>
+        <h2 align="left">T2 tank: </h2>
+        <div align="left" id="tank_T2_new"> 
+        </div>
+        <h2 align="left">T3 tank: </h2>
+        <div align="left" id="tank_T3_new"> 
+        </div>
+        <h2 align="left">T1 box:<span id="box_t1_new"> </h2>
+        <h2 align="left">T2 box:<span id="box_t2_new"> </h2>
+        <h2 align="left">T3 box:<span id="box_t3_new"> </h2>
+
+        <h1 align="left">Cumulative Result:</h1>
+        <h2 align="left">T1 tank: </h2>
+        <div align="left" id="tank_T1_cum"> 
+        </div>
+        <h2 align="left">T2 tank: </h2>
+        <div align="left" id="tank_T2_cum"> 
+        </div>
+        <h2 align="left">T3 tank: </h2>
+        <div align="left" id="tank_T3_cum"> 
+        </div>
+        <h2 align="left">T1 box:<span id="box_t1_cum"> </h2>
+        <h2 align="left">T2 box:<span id="box_t2_cum"> </h2>
+        <h2 align="left">T3 box:<span id="box_t3_cum"> </h2>
+    </body>
+    <p>
+        This page is created by DeadgunnerBrokenGun. This does not reflect actual drop rate. 
+    </p>
+</html>
