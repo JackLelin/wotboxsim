@@ -768,7 +768,7 @@ function createHistogramVisualization(histogramData, container) {
         let i = j;
         const xTick = document.createElement("div");
         const isMajor = (((i-minBoxValue) % xTickInterval) < minorTickInterval);
-        if(isMajor && Math.abs(Math.round(i/230) * 230 - j) <= minorTickInterval)
+        if(isMajor && Math.abs(Math.round(i/230) * 230 - j) <= xTickInterval/2)
             i = Math.round(i/230) * 230;
         xTick.className = (isMajor) ? "x-tick x-tick-major" : "x-tick x-tick-minor";
         xTick.textContent = i.toString();
