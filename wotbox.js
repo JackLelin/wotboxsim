@@ -838,7 +838,7 @@ function createHistogramVisualization(histogramData, container) {
     // Add a note about data representation
     const note = document.createElement("p");
     note.className = "histogram-note";
-    note.textContent = `Hover over bars it check how lucky people in this bar is.`;
+    note.textContent = `Hovering over a bar displays the percentile, indicating the percentage of people this individual is luckier than.`;
     histDiv.appendChild(note);
     
     container.appendChild(histDiv);
