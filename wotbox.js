@@ -765,14 +765,12 @@ function createHistogramVisualization(histogramData, container) {
     const minorTickInterval = Math.ceil(xTickInterval / 5);
     
     for (let j = minBoxValue; j <= maxBoxValue; j += minorTickInterval) {
-
-        if(j%230<minorTickInterval)
-            i = j-j%230;
-        else
-            i = j;
+        let i = j;
         const xTick = document.createElement("div");
         const isMajor = (((i-minBoxValue) % xTickInterval) < minorTickInterval);
-        xTick.className = (isMajor || i === j-j%230) ? "x-tick x-tick-major" : "x-tick x-tick-minor";
+        if(isMajor && Math.abs(Math.round(i/230) * 230 - j) <= minorTickInterval)
+            i = Math.round(i/230) * 230;
+        xTick.className = (isMajor) ? "x-tick x-tick-major" : "x-tick x-tick-minor";
         xTick.textContent = i.toString();
         
         // Position relative to the total range
