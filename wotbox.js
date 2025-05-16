@@ -755,18 +755,10 @@ function createHistogramVisualization(histogramData, container) {
     const barsContainer = document.createElement("div");
     barsContainer.className = "histogram-bars-container";
     
-    const barsDiv = document.createElement("div");
-    barsDiv.className = "histogram-bars";
-    
     // Calculate min and max box values
     const minBoxValue = boxValues[0];
     const maxBoxValue = boxValues[boxValues.length - 1];
     const numBins = boxValues.length;
-    
-    // Always display all box counts, regardless of how many there are
-    let displayBoxValues = boxValues;
-    let displayBins = bins;
-    let displayLabels = binLabels;
     
     // Add x-axis tick marks (about 10 major ticks and minor ticks in between)
     const xTickInterval = Math.ceil((maxBoxValue - minBoxValue) / 10);
@@ -774,61 +766,67 @@ function createHistogramVisualization(histogramData, container) {
     
     for (let i = minBoxValue; i <= maxBoxValue; i += minorTickInterval) {
         const xTick = document.createElement("div");
-        const isMajor = (i % xTickInterval === 0);
+        const isMajor = (((i-minBoxValue) % xTickInterval) < minorTickInterval);
+        // if(!isMajor) continue;
         xTick.className = isMajor ? "x-tick x-tick-major" : "x-tick x-tick-minor";
-        xTick.textContent = isMajor ? i : '';
+        // xTick.className = "x-tick x-tick-major";
+        // xTick.textContent = isMajor ? i : '1';
+        xTick.textContent = i.toString();
         
         // Position relative to the total range
         const position = ((i - minBoxValue) / (maxBoxValue - minBoxValue)) * 100;
         xTick.style.left = `${position}%`;
         barsContainer.appendChild(xTick);
     }
-    
-    // Create bars - using all data points with adjusted width
-    const displayLength = displayBoxValues.length;
-    
+        
     // Calculate optimal bar width - make bars narrower as count increases
-    let barWidth = 100 / displayLength;
+    let barWidth = 100 / numBins;
     
     // Set minimum width for bars to ensure visibility and maximum width for aesthetics
     const minBarWidth = 0.2; // Percent
     const maxBarWidth = 2.0; // Percent
     barWidth = Math.max(minBarWidth, Math.min(barWidth, maxBarWidth));
     
-    for (let i = 0; i < displayLength; i++) {
-        if (displayBins[i] === 0) continue; // Skip empty bins
+    const barsDiv = document.createElement("div");
+    barsDiv.className = "histogram-bars";
+
+    for (let i = 0; i < numBins; i++) {
+        if (bins[i] === 0) continue; // Skip empty bins
         
         // Create bar container
         const barContainer = document.createElement("div");
         barContainer.className = "histogram-bar-container";
         
         // Position the bar evenly across the available space
-        const leftPosition = (i / displayLength) * 100;
+        const leftPosition = (boxValues[i]-minBoxValue)/(maxBoxValue - minBoxValue)*100;
+        
         barContainer.style.left = `${leftPosition}%`;
         barContainer.style.width = `${barWidth}%`;
         
         // Create bar with height based on count
         const bar = document.createElement("div");
         bar.className = "histogram-bar";
-        const scaledHeight = (displayBins[i] / maxCount) * 100;
+        const scaledHeight = (bins[i] / maxCount) * 100;
         bar.style.height = `${scaledHeight}%`;
         
         // Add a tooltip with detailed information
-        const boxValue = displayBoxValues[i];
-        const count = displayBins[i];
-        const percentage = (count / totalPeople) * 100;
-        bar.title = `${boxValue} boxes: ${count} people (${percentage.toFixed(1)}%)`;
+
+        let count = 0;
+        for(var j = 0; j<i;j++)
+            count += bins[j];
+        const percentage = (1 - count / totalPeople) * 100;
+        bar.title = `${boxValues[i]} boxes, ${bins[i]}people, Lucky than (${percentage.toFixed(1)}%)`;
         
         barContainer.appendChild(bar);
         
         // Add bin label for selective bars - adjust frequency based on count
-        const labelFrequency = Math.max(1, Math.ceil(displayLength / 40));
-        if (i % labelFrequency === 0) {
-            const binLabel = document.createElement("div");
-            binLabel.className = "histogram-label";
-            binLabel.textContent = displayLabels[i];
-            barContainer.appendChild(binLabel);
-        }
+        // const labelFrequency = Math.max(1, Math.ceil(numBins / 40));
+        // if (i % labelFrequency === 0) {
+        //     const binLabel = document.createElement("div");
+        //     binLabel.className = "histogram-label";
+        //     binLabel.textContent = binLabels[i];
+        //     barContainer.appendChild(binLabel);
+        // }
         
         barsDiv.appendChild(barContainer);
     }
