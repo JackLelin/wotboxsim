@@ -838,7 +838,7 @@ function createHistogramVisualization(histogramData, container) {
     // Add a note about data representation
     const note = document.createElement("p");
     note.className = "histogram-note";
-    note.textContent = `Showing all ${numBins} unique box counts. Hover over bars for details.`;
+    note.textContent = `Hover over bars it check how lucky people in this bar is.`;
     histDiv.appendChild(note);
     
     container.appendChild(histDiv);
