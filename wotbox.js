@@ -740,7 +740,13 @@ function createHistogramVisualization(histogramData, container) {
         barsContainer.appendChild(xTick);
     }
 
-    for (let i = 230; i <= maxBoxValue; i += 230) {
+    let majorTickInterval = 60;
+    if((maxBoxValue - minBoxValue) > 1000)
+        majorTickInterval = 230;
+    else if ((maxBoxValue - minBoxValue) > 500)
+        majorTickInterval = 120;
+
+    for (let i = 0; i <= maxBoxValue; i += majorTickInterval) {
         const xTick = document.createElement("div");
 
         xTick.className = "x-tick x-tick-major";
