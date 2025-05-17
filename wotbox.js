@@ -77,6 +77,7 @@ function initialize()
     document.getElementById("opent2").addEventListener("click", opent2box);
     document.getElementById("opent3").addEventListener("click", opent3box);
     document.getElementById("automate").addEventListener("click", automateOpenBoxes);
+    document.getElementById("resetbutton").addEventListener("click", resetAll);
     document.getElementById("run-simulation").addEventListener("click", runSimulation);
 
     setGuarTank();
@@ -92,6 +93,42 @@ function buyBox()
         document.getElementById("box_bought").innerText = box_bought.toString();
         document.getElementById("t1box").innerText = t1box.toString();
     }
+}
+
+function resetAll()
+{
+    nohavelist = Array.from(alltanks);
+    countTank();
+
+    // Reset box counters
+    box_bought = 0;
+    t1box = 0;
+    t2box = 0;
+    t3box = 0;
+    t1cum = 0;
+    t2cum = 0;
+    t3cum = 0;
+
+    for(let t of newtanks) {
+        t.remove();
+    }
+    newtanks = [];
+
+    document.getElementById("box_bought").innerText = box_bought.toString();
+    document.getElementById("t1box").innerText = t1box.toString();
+    document.getElementById("t2box").innerText = t2box.toString();
+    document.getElementById("t3box").innerText = t3box.toString();
+    document.getElementById("box_t1_cum").innerText = t1cum.toString();
+    document.getElementById("box_t2_cum").innerText = t2cum.toString();
+    document.getElementById("box_t3_cum").innerText = t3cum.toString();
+
+    document.getElementById("tank_T1_cum").innerHTML = '';
+    document.getElementById("tank_T2_cum").innerHTML = '';
+    document.getElementById("tank_T3_cum").innerHTML = '';
+
+    // Reset guaranteed acquisition counters
+    gaTankLeft = Array.from(gaTankList);
+    setGuarTank();
 }
 
 function opent1box()
@@ -346,11 +383,20 @@ function runSimulation() {
         alert("Please enter a number between 1 and 3 for target tanks.");
         return;
     }
+
+    let index;
+    let not_have_list_sim = Array.from(alltanks);
+    for(let t of selectedtanks)
+    {
+        index = not_have_list_sim.indexOf(t);
+        if (index > -1) 
+            not_have_list_sim.splice(index, 1);
+    }
     
     // Count already owned tanks by tier
-    const alreadyOwnedT1Count = selectedtanks.filter(tank => t1list.includes(tank)).length;
-    const alreadyOwnedT2Count = selectedtanks.filter(tank => t2list.includes(tank)).length;
-    const alreadyOwnedT3Count = selectedtanks.filter(tank => t3list.includes(tank)).length;
+    const alreadyOwnedT1Count = countOwnTanks(t1list, not_have_list_sim);
+    const alreadyOwnedT2Count = countOwnTanks(t2list, not_have_list_sim);
+    const alreadyOwnedT3Count = countOwnTanks(t3list, not_have_list_sim);
     
     // If user already has all the target tanks, show a message
     if (alreadyOwnedT3Count >= targetTanks) {
@@ -370,17 +416,15 @@ function runSimulation() {
     setTimeout(() => {
         // Store data for histogram
         const boxesNeeded = [];
-        let totalBoxes = 0;
+        // let totalBoxes = 0;
         
         // Run simulation for each person
         for (let i = 0; i < populationSize; i++) {
-            // Reset state for each simulation
-            resetSimState();
-            
+            // Reset state for each simulation            
             // Run simulation for current person
-            const boxCount = simulateBoxesNeeded(additionalT3Needed);
+            const boxCount = simulateBoxesNeeded(targetTanks, not_have_list_sim);
             boxesNeeded.push(boxCount);
-            totalBoxes += boxCount;
+            // totalBoxes += boxCount;
         }
         
         // Clear previous results
@@ -487,165 +531,87 @@ function runSimulation() {
     }, 50); // Small delay to allow UI to update
 }
 
-function resetSimState() {
-    // Use the actual selected tanks from UI instead of resetting to empty
-    // This makes simulation consider already owned tanks
-    
-    // Start with full list, then remove selected tanks
-    nohavelist = Array.from(alltanks);
-    
-    // Remove tanks that user has selected as already owned
-    for (let t of selectedtanks) {
-        const index = nohavelist.indexOf(t);
-        if (index > -1) {
-            nohavelist.splice(index, 1);
-        }
-    }
-    
-    // Reset guaranteed acquisition counters
-    gaTankLeft = Array.from(gaTankList);
-    
-    // Reset box counters
-    t1box = 0;
-    t2box = 0;
-    t3box = 0;
-    t1cum = 0;
-    t2cum = 0;
-    t3cum = 0;
-    
-    // Clear newtanks
-    newtanks = [];
-}
 
-function simulateBoxesNeeded(targetT3Tanks) {
+function simulateBoxesNeeded(targetT3Tanks, not_have_list_in) {
     let boxCount = 0;
-    let t3TanksObtained = 0;
-    const t3TankInitialCount = t3list.length;
-    
-    // Initial purchase of boxes - start with just 1 box
-    let currentBoxBatch = 1;
-    
-    while (t3TanksObtained < targetT3Tanks) {
+    let boxessim = [0,0,0];
+    let not_have_list = Array.from(not_have_list_in);
+    let guar_left = Array.from(gaTankList);
+    while (countOwnTanks(t3list, not_have_list) < targetT3Tanks) {
         // Add boxes
-        boxCount += currentBoxBatch;
-        t1box += currentBoxBatch;
-        
+        boxCount += 1;
+        boxessim[0] += 1;
         // Open all boxes until none left
-        while (t1box > 0 || t2box > 0 || t3box > 0) {
-            if (t1box > 0) simulateOpenT1Box();
-            if (t2box > 0) simulateOpenT2Box();
-            if (t3box > 0) simulateOpenT3Box();
+        while (boxessim[0] > 0 || boxessim[1] > 0 || boxessim[2] > 0) 
+        {
+            simulateOpenBox(boxessim, guar_left, not_have_list, 0.02, t1boxcdf, t1tankcdf, t1list, 1);
+            simulateOpenBox(boxessim, guar_left, not_have_list, 0.05, t2boxcdf, t2tankcdf, t2list, 2);
+            simulateOpenBox(boxessim, guar_left, not_have_list,  0.1, t3boxcdf, t3tankcdf, t3list, 3);
         }
-        
-        // Count obtained T3 tanks
-        t3TanksObtained = t3TankInitialCount - countRemainingTanks(t3list);
-        
-        // If we still need more tanks, increment by exactly 1 box at a time
-        currentBoxBatch = 1;
     }
     
     return boxCount;
 }
 
-function countRemainingTanks(tankList) {
+function countOwnTanks(tankList, not_have_list) {
     let count = 0;
     for (let tank of tankList) {
-        if (nohavelist.includes(tank)) {
+        if (not_have_list.includes(tank)) {
             count++;
         }
     }
-    return count;
+    return tankList.length - count;
 }
 
-function simulateOpenT1Box() {
-    let box = t1box;
-    t1box = 0;
-    simulateOpenBox(box, 0.02, t1boxcdf, t1tankcdf, t1list, 1);
-}
+function simulateOpenBox(boxessim, guar_left, not_have_list, prob, boxCDF, tankCDF, tankList, tier) 
+{
+    if(boxessim[tier-1] === 0)
+        return;
+    boxessim[tier-1] -= 1;
+    // Chance to get additional boxes
+    if (Math.random() < 0.2) {
+        const bi = getLucky(boxCDF);
+        if (bi == 0) boxessim[0] += 1;
+        else if (bi == 1) boxessim[1] += 1;
+        else if (bi == 2) boxessim[2] += 1;            
+    }
 
-function simulateOpenT2Box() {
-    let box = t2box;
-    t2box = 0;
-    simulateOpenBox(box, 0.05, t2boxcdf, t2tankcdf, t2list, 2);
-}
-
-function simulateOpenT3Box() {
-    let box = t3box;
-    t3box = 0;
-    simulateOpenBox(box, 0.1, t3boxcdf, t3tankcdf, t3list, 3);
-}
-
-function simulateOpenBox(bnum, prob, boxCDF, tankCDF, tankList, tier) {
-    if (bnum <= 0) return;
-    
-    let t1boxtemp = 0;
-    let t2boxtemp = 0;
-    let t3boxtemp = 0;
-    
-    for (let b = 0; b < bnum; b++) {
-        // Chance to get additional boxes
-        if (Math.random() < 0.2) {
-            const bi = getLucky(boxCDF);
-            if (bi == 0) t1boxtemp += 1;
-            else if (bi == 1) t2boxtemp += 1;
-            else if (bi == 2) t3boxtemp += 1;            
-        }
-
-        // Chance to get a tank
-        if (Math.random() < prob) {
-            gaTankLeft[tier-1] = gaTankList[tier-1];
-            const result = simulateGetTank(tier, tankCDF, tankList);
-            if (result === 1) {
-                // If all tanks of this tier are collected, we get a box of next tier
-                if (tier === 1) t2boxtemp += 1;
-                else if (tier === 2) t3boxtemp += 1;
-            }
-        } else {
-            gaTankLeft[tier-1]--;
-            if (gaTankLeft[tier-1] == 0) {
-                gaTankLeft[tier-1] = gaTankList[tier-1];
-                const result = simulateGetTank(tier, tankCDF, tankList);
-                if (result === 1) {
-                    // If all tanks of this tier are collected, we get a box of next tier
-                    if (tier === 1) t2boxtemp += 1;
-                    else if (tier === 2) t3boxtemp += 1;
-                }
-            }
+    // Chance to get a tank
+    if (Math.random() < prob) {
+        guar_left[tier-1] = gaTankList[tier-1];
+        boxessim[2] += simulateGetTank(tankCDF, tankList, not_have_list);
+    } else {
+        guar_left[tier-1]--;
+        if (guar_left[tier-1] == 0) {
+            guar_left[tier-1] = gaTankList[tier-1];
+            boxessim[2] += simulateGetTank(tankCDF, tankList, not_have_list);
         }
     }
-    
-    // Update box counts
-    t1box += t1boxtemp;
-    t2box += t2boxtemp;
-    t3box += t3boxtemp;
+    return;
 }
 
-function simulateGetTank(tier, tankCDF, tankList) {
+function simulateGetTank(tankCDF, tankList, not_have_list) {
     // If all tanks from this tier are already obtained, return a higher tier box
     let allTanksObtained = true;
     for (let i = 0; i < tankList.length; i++) {
-        if (nohavelist.includes(tankList[i])) {
+        if (not_have_list.includes(tankList[i])) {
             allTanksObtained = false;
             break;
         }
     }
     
     if (allTanksObtained) {
-        // Return a higher tier box if all tanks are already obtained
-        if (tier < 3) {
-            return 1; // Return a box of the next tier
-        }
-        return 0; // For T3, no higher tier to return
+            return 1; // all tanks obtained, return a box 
     }
 
     // Keep trying until we get a tank we don't have
     while (true) {
         const ti = getLucky(tankCDF);
         const tankId = tankList[ti];
-        const index = nohavelist.indexOf(tankId);
+        const index = not_have_list.indexOf(tankId);
         
         if (index > -1) {
-            nohavelist.splice(index, 1); // Remove from not-have list
+            not_have_list.splice(index, 1); // Remove from not-have list
             return 0;
         }
     }
@@ -697,7 +663,7 @@ function createHistogramVisualization(histogramData, container) {
     // Add axis labels
     const xAxisLabel = document.createElement("div");
     xAxisLabel.className = "axis-label x-axis-label";
-    xAxisLabel.textContent = "Number of Boxes Opened (exact count)";
+    xAxisLabel.textContent = "Number of Boxes Bought";
     chartContainer.appendChild(xAxisLabel);
     
     const yAxisLabel = document.createElement("div");
@@ -761,16 +727,23 @@ function createHistogramVisualization(histogramData, container) {
     const numBins = boxValues.length;
     
     // Add x-axis tick marks (about 10 major ticks and minor ticks in between)
-    const xTickInterval = Math.ceil((maxBoxValue - minBoxValue) / 10);
-    const minorTickInterval = Math.ceil(xTickInterval / 5);
+    const minorTickInterval = Math.ceil((maxBoxValue - minBoxValue) / 50);
     
-    for (let j = minBoxValue; j <= maxBoxValue; j += minorTickInterval) {
-        let i = j;
+    for (let i = minBoxValue; i <= maxBoxValue; i += minorTickInterval) {
         const xTick = document.createElement("div");
-        const isMajor = (((i-minBoxValue) % xTickInterval) < minorTickInterval);
-        if(isMajor && Math.abs(Math.round(i/230) * 230 - j) <= xTickInterval/2)
-            i = Math.round(i/230) * 230;
-        xTick.className = (isMajor) ? "x-tick x-tick-major" : "x-tick x-tick-minor";
+        xTick.className = "x-tick x-tick-minor";
+        xTick.textContent = i.toString();
+        
+        // Position relative to the total range
+        const position = ((i - minBoxValue) / (maxBoxValue - minBoxValue)) * 100;
+        xTick.style.left = `${position}%`;
+        barsContainer.appendChild(xTick);
+    }
+
+    for (let i = 230; i <= maxBoxValue; i += 230) {
+        const xTick = document.createElement("div");
+
+        xTick.className = "x-tick x-tick-major";
         xTick.textContent = i.toString();
         
         // Position relative to the total range
